@@ -1,4 +1,4 @@
-node("node1"){
+node(""){
  
  def MHD = tool name: "maven3.8.8"
   
