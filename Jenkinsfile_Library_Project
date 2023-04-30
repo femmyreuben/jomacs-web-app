@@ -1,0 +1,40 @@
+@Library('JomacsSharedLibrary') _
+pipeline{
+  agent any
+  tools{
+    maven "maven3.8.8"
+  }
+
+    stages{
+      stage("1. Git clone from repo"){
+        steps{
+         sh "echo start of git clone"
+         git branch: 'main', url: 'https://github.com/femmyreuben/jomacs-web-app.git'
+         sh "echo end of git clone"
+        }
+      }
+      
+      stage("2. Build from Maven"){
+        steps{
+          sh "echo start building from Maven"
+          common("Build")
+          sh "echo end of build"
+        }  
+      }
+      
+      stage("3. Code Scan"){
+        steps{
+          sh "echo start of code scan"
+          common("Code Quality Report")
+          sh "echo end of code scan"
+        }  
+      }
+      
+      stage("4. Store Artifacts"){
+        steps{
+           sh "echo Deploy Artifact"
+           common("Upload Into Nexus")
+        }  
+      }
+    }
+}
